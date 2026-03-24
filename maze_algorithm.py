@@ -8,6 +8,7 @@ class Cell:
         self.x = x
         self.y = y
         self.visited = False
+        self.blocked = False
         self.walls = {"N": True, "E": True, "S": True, "W": True}
 
 
@@ -27,7 +28,9 @@ def get_neighbors(cell, grid):
     for dx, dy in directions.values():
         nx, ny = cell.x + dx, cell.y + dy
         if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
-            neighbors.append(grid[ny][nx])
+            neighbor = grid[ny][nx]
+            if not neighbor.visited and not neighbor.blocked:
+                neighbors.append(grid[ny][nx])
     return neighbors
 
 
@@ -61,8 +64,9 @@ def print_maze(grid, entry, exit):
 
         for x in range(width):
             print("|" if grid[y][x].walls["W"] else " ", end="")
-
-            if grid[y][x] == entry:
+            if grid[y][x].blocked:
+                print("###", end="")
+            elif grid[y][x] == entry:
                 print(" E ", end="")
             elif grid[y][x] == exit:
                 print(" X ", end="")
@@ -121,9 +125,6 @@ def set_entry_exit(grid, entry, exit):
     entry_cell = grid[eny][enx]
     exit_cell = grid[exy][exx]
 
-    entry_cell.walls["N"] = False
-    exit_cell.walls["S"] = False
-
     return entry_cell, exit_cell
 
 
@@ -135,11 +136,41 @@ def generate_maze(config):
 
     grid = create_grid(width, height)
 
+    draw_42(grid)
+
     prim_maze(grid, draw_step=draw)
 
     entry_tuple = config.get("ENTRY")
     exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
+    draw(grid, entry, exit)
 
     return grid, entry, exit
+
+
+def draw_42(grid):
+    height = len(grid)
+    width = len(grid[0])
+
+    if height < 6 or width < 12:
+        return
+
+    start_y = height // 2 - 2
+    start_x = width // 2 - 4
+
+    pattern = [
+        "#    ###",
+        "#      #",
+        "###  ###",
+        "  #  #  ",
+        "  #  ###"
+    ]
+
+    for dy in range(len(pattern)):
+        for dx in range(len(pattern[dy])):
+            if pattern[dy][dx] == "#":
+                y = start_y + dy
+                x = start_x + dx
+                if 0 <= y < height and 0 <= x < width:
+                    grid[y][x].blocked = True
