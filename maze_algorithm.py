@@ -143,15 +143,3 @@ def generate_maze(config):
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
 
     return grid, entry, exit
-
-
-if __name__ == "__main__":
-    from config_checker import ConfigChecker
-
-    checker = ConfigChecker()
-    config = checker.opener()
-
-    grid, entry, exit = generate_maze(config)
-
-    os.system("cls" if os.name == "nt" else "clear")
-    print_maze(grid, entry, exit)
