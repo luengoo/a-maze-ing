@@ -22,7 +22,6 @@ class ConfigChecker:
             print(f"Found an error in config.txt file: {e}")
 
     def parse_value(self, key: str, value: str):
-        """WHATEVER"""
         if value.isdigit():
             return int(value)
         try:
@@ -80,6 +79,6 @@ class ConfigChecker:
            0 <= config["ENTRY"][1] < config["HEIGHT"]):
             raise ValueError("ENTRY fuera del mapa")
 
-        if not (0 <= config["EXIT"][0] < config["WIDTH"] and
-                0 <= config["EXIT"][1] < config["HEIGHT"]):
+        if not (0 <= config["EXIT"][1] < config["WIDTH"] and
+                0 <= config["EXIT"][0] < config["HEIGHT"]):
             raise ValueError("EXIT fuera del mapa")

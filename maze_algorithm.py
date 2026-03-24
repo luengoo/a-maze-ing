@@ -1,5 +1,6 @@
 import random
 import time
+import os
 
 
 class Cell:
@@ -23,7 +24,7 @@ def get_neighbors(cell, grid):
     }
 
     neighbors = []
-    for d, (dx, dy) in directions.items():
+    for dx, dy in directions.values():
         nx, ny = cell.x + dx, cell.y + dy
         if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
             neighbors.append(grid[ny][nx])
@@ -48,7 +49,40 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def prim_maze(grid):
+def print_maze(grid, entry, exit):
+    height = len(grid)
+    width = len(grid[0])
+
+    for y in range(height):
+        for x in range(width):
+            print("+", end="")
+            print("---" if grid[y][x].walls["N"] else "   ", end="")
+        print("+")
+
+        for x in range(width):
+            print("|" if grid[y][x].walls["W"] else " ", end="")
+
+            if grid[y][x] == entry:
+                print(" E ", end="")
+            elif grid[y][x] == exit:
+                print(" X ", end="")
+            else:
+                print("   ", end="")
+
+        print("|")
+
+    for x in range(width):
+        print("+---", end="")
+    print("+")
+
+
+def draw(grid, entry=None, exit=None):
+    os.system("cls" if os.name == "nt" else "clear")
+    print_maze(grid, entry, exit)
+    time.sleep(0.05)
+
+
+def prim_maze(grid, draw_step=None):
     height = len(grid)
     width = len(grid[0])
 
@@ -56,6 +90,9 @@ def prim_maze(grid):
     start.visited = True
 
     frontier = get_neighbors(start, grid)
+
+    if draw_step:
+        draw_step(grid)
 
     while frontier:
         cell = random.choice(frontier)
@@ -73,52 +110,21 @@ def prim_maze(grid):
                 if not n.visited and n not in frontier:
                     frontier.append(n)
 
-
-def set_entry_exit(grid):
-    height = len(grid)
-    width = len(grid[0])
-
-    entry = grid[0][random.randint(0, width-1)]
-    exit = grid[height-1][random.randint(0, width-1)]
-
-    entry.walls["N"] = False
-    exit.walls["S"] = False
-
-    return entry, exit
+            if draw_step:
+                draw_step(grid)
 
 
-def print_maze(grid, entry, exit):
-    height = len(grid)
-    width = len(grid[0])
+def set_entry_exit(grid, entry, exit):
+    eny, enx = entry
+    exy, exx = exit
 
-    for y in range(height):
-        time.sleep(0.1)
-        for x in range(width):
-            print("+", end="")
-            if grid[y][x].walls["N"]:
-                print("---", end="")
-            else:
-                print("   ", end="")
-        print("+")
+    entry_cell = grid[eny][enx]
+    exit_cell = grid[exy][exx]
 
-        for x in range(width):
-            if grid[y][x].walls["W"]:
-                print("|", end="")
-            else:
-                print(" ", end="")
+    entry_cell.walls["N"] = False
+    exit_cell.walls["S"] = False
 
-            if grid[y][x] == entry:
-                print(" E ", end="")
-            elif grid[y][x] == exit:
-                print(" X ", end="")
-            else:
-                print("   ", end="")
-
-        print("|")
-
-    for x in range(width):
-        print("+---", end="")
-    print("+")
+    return entry_cell, exit_cell
 
 
 def generate_maze(config):
@@ -129,17 +135,23 @@ def generate_maze(config):
 
     grid = create_grid(width, height)
 
-    prim_maze(grid)
+    prim_maze(grid, draw_step=draw)
 
-    entry, exit = set_entry_exit(grid)
+    entry_tuple = config.get("ENTRY", "0,0")
+    exit_tuple = config.get("EXIT", "0,0")
+
+    entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
 
     return grid, entry, exit
 
 
 if __name__ == "__main__":
     from config_checker import ConfigChecker
+
     checker = ConfigChecker()
     config = checker.opener()
 
     grid, entry, exit = generate_maze(config)
+
+    os.system("cls" if os.name == "nt" else "clear")
     print_maze(grid, entry, exit)
