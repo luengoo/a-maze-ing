@@ -1,6 +1,6 @@
 all:
-	python3 -m flake8
-	python3 a_maze_ing.py config.txt
+	# python3 -m flake8
+	python3 maze_algorithm.py config.txt
 
 install:
 	pip install -r requirements.txt
