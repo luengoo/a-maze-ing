@@ -137,8 +137,8 @@ def generate_maze(config):
 
     prim_maze(grid, draw_step=draw)
 
-    entry_tuple = config.get("ENTRY", "0,0")
-    exit_tuple = config.get("EXIT", "0,0")
+    entry_tuple = config.get("ENTRY")
+    exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
 
