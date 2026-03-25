@@ -16,7 +16,7 @@ def create_grid(width, height):
     return [[Cell(x, y) for x in range(width)] for y in range(height)]
 
 
-def get_neighbors(cell, grid):
+def get_neighbors(cell, grid, include_blocked=False):
     directions = {
         "N": (0, -1),
         "E": (1, 0),
@@ -29,10 +29,9 @@ def get_neighbors(cell, grid):
         nx, ny = cell.x + dx, cell.y + dy
         if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
             neighbor = grid[ny][nx]
-            if not neighbor.visited and not neighbor.blocked:
-                neighbors.append(grid[ny][nx])
+            if not neighbor.visited and (include_blocked or not neighbor.blocked):
+                neighbors.append(neighbor)
     return neighbors
-
 
 def remove_wall(a, b):
     dx = b.x - a.x
@@ -91,31 +90,33 @@ def prim_maze(grid, draw_step=None):
     width = len(grid[0])
 
     start = grid[random.randint(0, height-1)][random.randint(0, width-1)]
+    while start.blocked:
+        start = grid[random.randint(0, height-1)][random.randint(0, width-1)]
     start.visited = True
 
     frontier = get_neighbors(start, grid)
-
-    if draw_step:
-        draw_step(grid)
 
     while frontier:
         cell = random.choice(frontier)
         frontier.remove(cell)
 
-        visited_neighbors = [n for n in get_neighbors(cell, grid) if n.visited]
+        directions = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0)}
+        visited_neighbors = []
+        for dx, dy in directions.values():
+            nx, ny = cell.x + dx, cell.y + dy
+            if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
+                n = grid[ny][nx]
+                if n.visited and not n.blocked:
+                    visited_neighbors.append(n)
 
         if visited_neighbors:
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
-
             cell.visited = True
 
             for n in get_neighbors(cell, grid):
                 if not n.visited and n not in frontier:
                     frontier.append(n)
-
-            if draw_step:
-                draw_step(grid)
 
 
 def set_entry_exit(grid, entry, exit):
@@ -174,3 +175,4 @@ def draw_42(grid):
                 x = start_x + dx
                 if 0 <= y < height and 0 <= x < width:
                     grid[y][x].blocked = True
+                    grid[y][x].visited = True
