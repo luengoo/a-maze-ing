@@ -13,8 +13,9 @@ def menu(config):
 
     if option is 1:
         grid, entry, exit = generate_maze(config)
+        success, path = solver(grid, entry, exit, path=None)
         os.system("cls" if os.name == "nt" else "clear")
-        print_maze(grid, entry, exit)
+        print_maze(grid, entry, exit, path)
 
     elif option is 2:
 
@@ -38,9 +39,9 @@ def main():
     config = checker.opener()
 
     grid, entry, exit = generate_maze(config)
-
+    success, path = solver(grid, entry, exit, path=None)
     os.system("cls" if os.name == "nt" else "clear")
-    print_maze(grid, entry, exit)
+    print_maze(grid, entry, exit, path)
     while True:
         menu(config)
 

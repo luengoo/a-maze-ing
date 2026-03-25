@@ -1,3 +1,4 @@
+from colorama import Fore, Style
 import random
 import time
 import os
@@ -51,7 +52,7 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit):
+def print_maze(grid, entry, exit, path=None):
     height = len(grid)
     width = len(grid[0])
 
@@ -62,6 +63,8 @@ def print_maze(grid, entry, exit):
         print("+")
 
         for x in range(width):
+
+
             print("|" if grid[y][x].walls["W"] else " ", end="")
             if grid[y][x].blocked:
                 print("###", end="")
@@ -69,6 +72,8 @@ def print_maze(grid, entry, exit):
                 print(" E ", end="")
             elif grid[y][x] == exit:
                 print(" X ", end="")
+            elif path and grid[y][x] in path:
+                print(Fore.LIGHTCYAN_EX + " * ", end="" + Style.RESET_ALL)
             else:
                 print("   ", end="")
 

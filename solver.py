@@ -3,13 +3,15 @@
 def solver(grid, entry, exit, visited=None, path=None):
 
     # base cases
+
+    # set to avoid duplicates
     if visited is None:
         visited = set()
 
     if path is None:
         path = []
 
-    if entry == exit:
+    if entry.x == exit.x and entry.y == exit.y:
         path.append(entry)
         return True, path
 
@@ -28,7 +30,8 @@ def solver(grid, entry, exit, visited=None, path=None):
         if not entry.walls[direction]:
             neighbor = grid[entry.y + dy][entry.x + dx]
             if neighbor not in visited:
-                if solver(grid, neighbor, exit, visited, path):
+                success , _ = solver(grid, neighbor, exit, visited, path)
+                if success:
                     return True, path
 
     #removes last element from list
