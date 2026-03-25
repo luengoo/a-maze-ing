@@ -1,5 +1,6 @@
 from config_checker import ConfigChecker
 from maze_algorithm import generate_maze, print_maze
+from solver import solver
 import os
 
 
