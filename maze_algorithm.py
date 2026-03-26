@@ -58,7 +58,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
     height = len(grid)
     width = len(grid[0])
 
-    os.system("cls" if os.name == "nt" else "clear")
+    print("\033[H", end="")
     for y in range(height):
         for x in range(width):
             print(maze_color + "+", end="")
@@ -118,8 +118,8 @@ def prim_maze(grid, maze_color):
         if visited_neighbors:
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
-            #time.sleep(0.01)
-           # print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color, finished=False)
+            time.sleep(0.01)
+            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color, finished=False)
             cell.visited = True
 
             for n in get_neighbors(cell, grid):

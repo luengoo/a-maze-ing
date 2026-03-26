@@ -48,9 +48,7 @@ def menu():
 
         elif option == 4:
 
-            # change color 
-            pass
-    
+            print("To be implemented--")
 
 
 def main():
