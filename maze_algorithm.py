@@ -52,7 +52,7 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit, path=None):
+def print_maze(grid, entry, exit, path, visible, maze_color):
     height = len(grid)
     width = len(grid[0])
 
@@ -64,7 +64,6 @@ def print_maze(grid, entry, exit, path=None):
 
         for x in range(width):
 
-
             print("|" if grid[y][x].walls["W"] else " ", end="")
             if grid[y][x].blocked:
                 print("###", end="")
@@ -72,7 +71,7 @@ def print_maze(grid, entry, exit, path=None):
                 print(" E ", end="")
             elif grid[y][x] == exit:
                 print(" X ", end="")
-            elif path and grid[y][x] in path:
+            elif path and grid[y][x] in path and visible is True:
                 print(Fore.LIGHTCYAN_EX + " * ", end="" + Style.RESET_ALL)
             else:
                 print("   ", end="")
@@ -86,7 +85,7 @@ def print_maze(grid, entry, exit, path=None):
 
 def draw(grid, entry=None, exit=None):
     os.system("cls" if os.name == "nt" else "clear")
-    print_maze(grid, entry, exit)
+    print_maze(grid, entry, exit, path=None, visible=False, maze_color=None)
     time.sleep(0.05)
 
 
