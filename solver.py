@@ -30,10 +30,10 @@ def solver(grid, entry, exit, visited=None, path=None):
         if not entry.walls[direction]:
             neighbor = grid[entry.y + dy][entry.x + dx]
             if neighbor not in visited:
-                success , _ = solver(grid, neighbor, exit, visited, path)
+                success, _ = solver(grid, neighbor, exit, visited, path)
                 if success:
                     return True, path
 
-    #removes last element from list
+    # removes last element from list
     path.pop()
     return False, path

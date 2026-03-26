@@ -5,33 +5,33 @@ import os
 
 
 def menu(config):
-       
+
     print("\n---------------MENU------------------")
-    print("1 - Regenerate a maze | 2 - Change colors | 3 - Hide path | 4 - Change color 42")
+    print("1 - Regenerate a maze | 2 - Change colors"
+          " | 3 - Hide path | 4 - Change color 42")
 
     option = int(input("Enter option: "))
 
-    if option is 1:
+    if option == 1:
         grid, entry, exit = generate_maze(config)
         success, path = solver(grid, entry, exit, path=None)
         os.system("cls" if os.name == "nt" else "clear")
         print_maze(grid, entry, exit, path)
 
-    elif option is 2:
+    elif option == 2:
 
         # maze color
         pass
-    
-    elif option is 3:
+
+    elif option == 3:
 
         # path toggle
         pass
-    
-    elif option is 4:
 
-        # change color 
+    elif option == 4:
+
+        # change color
         pass
-    
 
 
 def main():
