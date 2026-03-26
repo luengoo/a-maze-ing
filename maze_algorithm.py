@@ -30,9 +30,11 @@ def get_neighbors(cell, grid, include_blocked=False):
         nx, ny = cell.x + dx, cell.y + dy
         if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
             neighbor = grid[ny][nx]
-            if not neighbor.visited and (include_blocked or not neighbor.blocked):
+            if not neighbor.visited and (
+             include_blocked or not neighbor.blocked):
                 neighbors.append(neighbor)
     return neighbors
+
 
 def remove_wall(a, b):
     dx = b.x - a.x
