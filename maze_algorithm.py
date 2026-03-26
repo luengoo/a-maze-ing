@@ -54,10 +54,11 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit, path, visible, maze_color):
+def print_maze(grid, entry, exit, path, visible, maze_color, finished):
     height = len(grid)
     width = len(grid[0])
 
+    os.system("cls" if os.name == "nt" else "clear")
     for y in range(height):
         for x in range(width):
             print("+", end="")
@@ -84,14 +85,13 @@ def print_maze(grid, entry, exit, path, visible, maze_color):
         print("+---", end="")
     print("+")
 
-
-def draw(grid, entry=None, exit=None):
-    os.system("cls" if os.name == "nt" else "clear")
-    print_maze(grid, entry, exit, path=None, visible=False, maze_color=None)
-    time.sleep(0.05)
+    if not finished:
+        print("\n****** A-MAZE-ING ******")
+        print("1 - Regenerate a maze\n2 - Change colors\n3 - Hide path\n4 - Change color 42")
 
 
-def prim_maze(grid, draw_step=None):
+
+def prim_maze(grid):
     height = len(grid)
     width = len(grid[0])
 
@@ -118,6 +118,8 @@ def prim_maze(grid, draw_step=None):
         if visited_neighbors:
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
+            time.sleep(0.09)
+            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=None, finished=False)
             cell.visited = True
 
             for n in get_neighbors(cell, grid):
@@ -145,13 +147,13 @@ def generate_maze(config):
 
     draw_42(grid)
 
-    prim_maze(grid, draw_step=draw)
+    prim_maze(grid)
 
     entry_tuple = config.get("ENTRY")
     exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
-    draw(grid, entry, exit)
+    print_maze(grid, entry, exit, path=None, visible=False, maze_color=None, finished=True)
 
     return grid, entry, exit
 

@@ -15,26 +15,23 @@ def menu():
 
     visible = False
     maze_color = None
-    print_maze(grid, entry, exit, path, visible, maze_color)
+    print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
 
     while True:
-        print("\n****** A-MAZE-ING ******")
-        print("1 - Regenerate a maze\n2 - Change colors\n3 - Hide path\n4 - Change color 42")
+        option = int(input("\nEnter option: "))
 
-        option = int(input("Enter option: "))
-
-        if option is 1:
+        if option == 1:
             grid, entry, exit = generate_maze(config)
             success, path = solver(grid, entry, exit, path=None)
             os.system("cls" if os.name == "nt" else "clear")
-            print_maze(grid, entry, exit, path, visible, maze_color)
+            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
 
-        elif option is 2:
+        elif option == 2:
             os.system("cls" if os.name == "nt" else "clear")
-            print_maze(grid, entry, exit, path, visible, maze_color)
+            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
             pass
 
-        elif option is 3:
+        elif option == 3:
             os.system("cls" if os.name == "nt" else "clear")
             if visible is True:
                 visible = False
@@ -42,9 +39,9 @@ def menu():
             elif visible is False:
                 visible = True
 
-            print_maze(grid, entry, exit, path, visible, maze_color)
+            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
 
-        elif option is 4:
+        elif option == 4:
 
             # change color 
             pass
