@@ -61,29 +61,29 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
     os.system("cls" if os.name == "nt" else "clear")
     for y in range(height):
         for x in range(width):
-            print("+", end="")
+            print(maze_color + "+", end="")
             print("---" if grid[y][x].walls["N"] else "   ", end="")
         print("+")
 
         for x in range(width):
 
-            print("|" if grid[y][x].walls["W"] else " ", end="")
+            print(maze_color + "|" if grid[y][x].walls["W"] else " ", end="")
             if grid[y][x].blocked:
-                print("###", end="")
+                print(maze_color + "###", end="")
             elif grid[y][x] == entry:
-                print(" E ", end="")
+                print(maze_color + " E ", end="")
             elif grid[y][x] == exit:
-                print(" X ", end="")
+                print(maze_color + " X ", end="")
             elif path and grid[y][x] in path and visible is True:
-                print(Fore.LIGHTCYAN_EX + " * ", end="" + Style.RESET_ALL)
+                print(Fore.RED + " * ", end="" + Style.RESET_ALL)
             else:
                 print("   ", end="")
 
-        print("|")
+        print(maze_color + "|")
 
     for x in range(width):
         print("+---", end="")
-    print("+")
+    print("+" + Style.RESET_ALL)
 
     if not finished:
         print("\n****** A-MAZE-ING ******")
@@ -91,7 +91,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
 
 
 
-def prim_maze(grid):
+def prim_maze(grid, maze_color):
     height = len(grid)
     width = len(grid[0])
 
@@ -118,8 +118,8 @@ def prim_maze(grid):
         if visited_neighbors:
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
-            time.sleep(0.09)
-            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=None, finished=False)
+            #time.sleep(0.01)
+           # print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color, finished=False)
             cell.visited = True
 
             for n in get_neighbors(cell, grid):
@@ -137,7 +137,7 @@ def set_entry_exit(grid, entry, exit):
     return entry_cell, exit_cell
 
 
-def generate_maze(config):
+def generate_maze(config, maze_color):
     random.seed(config.get("SEED"))
 
     width = int(config.get("WIDTH", 20))
@@ -147,13 +147,13 @@ def generate_maze(config):
 
     draw_42(grid)
 
-    prim_maze(grid)
+    prim_maze(grid, maze_color)
 
     entry_tuple = config.get("ENTRY")
     exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
-    print_maze(grid, entry, exit, path=None, visible=False, maze_color=None, finished=True)
+    print_maze(grid, entry, exit, path=None, visible=False, maze_color=maze_color, finished=True)
 
     return grid, entry, exit
 
