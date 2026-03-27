@@ -3,7 +3,7 @@ from maze_algorithm import generate_maze, print_maze
 from solver import solver
 from colorama import Fore
 from itertools import cycle
-
+from time import sleep
 
 def menu():
 
@@ -45,6 +45,14 @@ def menu():
             color42 = next(colors42)
             print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
+        elif option == 5:
+            for _ in range(100):
+                color42 = next(colors42)
+                print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
+                sleep(0.04)
+                maze_color = next(colors)
+                print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
+                sleep(0.04)
 
 if __name__ == "__main__":
     menu()
