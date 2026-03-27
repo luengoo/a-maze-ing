@@ -13,7 +13,7 @@ def menu():
 
     maze_color = Fore.CYAN
     grid, entry, exit = generate_maze(config, maze_color)
-    success, path = solver(grid, entry, exit, path=None)
+    path = solver(grid, entry, exit, path=None)
     os.system("cls" if os.name == "nt" else "clear")
 
     visible = False
@@ -26,7 +26,7 @@ def menu():
 
         if option == 1:
             grid, entry, exit = generate_maze(config, maze_color)
-            success, path = solver(grid, entry, exit, path=None)
+            path = solver(grid, entry, exit, path=None)
             os.system("cls" if os.name == "nt" else "clear")
             print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
 

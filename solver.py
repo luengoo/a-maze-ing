@@ -1,39 +1,35 @@
+from collections import deque
 
+def solver(grid, entry, exit, visited=False, path=None):
 
-def solver(grid, entry, exit, visited=None, path=None):
+    visited = set()
+    rows, cols = len(grid), len(grid[0])
 
-    # base cases
+    q = deque()
+    q.append([entry])
+    
+    visited.add((entry.y, entry.x))
 
-    # set to avoid duplicates
-    if visited is None:
-        visited = set()
+    directions = [
+        (0, -1),
+        (1, 0),
+        (0, 1),
+        (-1, 0)
+    ]
 
-    if path is None:
-        path = []
+    while q:
+        path = q.popleft()
+        current = path[-1]
 
-    if entry.x == exit.x and entry.y == exit.y:
-        path.append(entry)
-        return True, path
+        if current.x == exit.x and current.y == exit.y:
+            pass
 
-    visited.add(entry)
-    path.append(entry)
+        for dy, dx in directions:
+            ny, nx = current.y + dy, current.x + dx
 
-    directions = {
-        "N": (0, -1),
-        "E": (1, 0),
-        "S": (0, 1),
-        "W": (-1, 0)
-    }
-
-    # for every neighbor, call recursion to check if base case is true
-    for direction, (dx, dy) in directions.items():
-        if not entry.walls[direction]:
-            neighbor = grid[entry.y + dy][entry.x + dx]
-            if neighbor not in visited:
-                success, _ = solver(grid, neighbor, exit, visited, path)
-                if success:
-                    return True, path
-
-    # removes last element from list
-    path.pop()
-    return False, path
+            if (0 <= nx < rows and 0 <= ny < cols and
+                grid[ny][nx] == 0 and (ny, nx) not in visited):
+                visited.add((ny, nx))
+                neighbor = grid[ny][nx]
+                q.append(path + neighbor)
+        return None
