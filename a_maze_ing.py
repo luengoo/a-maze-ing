@@ -1,9 +1,8 @@
 from config_checker import ConfigChecker
 from maze_algorithm import generate_maze, print_maze
 from solver import solver
-import os
 from colorama import Fore
-from random import choice
+from itertools import cycle
 
 
 def menu():
@@ -11,49 +10,41 @@ def menu():
     checker = ConfigChecker()
     config = checker.opener()
 
-    maze_color = Fore.CYAN
-    grid, entry, exit = generate_maze(config, maze_color)
+    maze_color = Fore.WHITE
+    color42 = Fore.WHITE
+    grid, entry, exit = generate_maze(config, maze_color, color42)
     path = solver(grid, entry, exit)
-    os.system("cls" if os.name == "nt" else "clear")
     visible = False
 
-    colors = [Fore.GREEN, Fore.YELLOW, Fore.RED]
-    print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
+    colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE))
+    colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE))
+    print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
     while True:
         option = int(input("\nEnter option: "))
 
         if option == 1:
-            grid, entry, exit = generate_maze(config, maze_color)
+            grid, entry, exit = generate_maze(config, maze_color, color42)
             path = solver(grid, entry, exit)
-            os.system("cls" if os.name == "nt" else "clear")
-            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
+            print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
         elif option == 2:
-            maze_color = choice(colors)
-            os.system("cls" if os.name == "nt" else "clear")
-            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
-            pass
+            maze_color = next(colors)
+            print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
         elif option == 3:
-            os.system("cls" if os.name == "nt" else "clear")
             if visible is True:
                 visible = False
 
             elif visible is False:
                 visible = True
 
-            print_maze(grid, entry, exit, path, visible, maze_color, finished=False)
+            print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
         elif option == 4:
-
-            print("To be implemented--")
-
-
-def main():
-
-    menu()
+            color42 = next(colors42)
+            print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
 
 if __name__ == "__main__":
-    main()
+    menu()

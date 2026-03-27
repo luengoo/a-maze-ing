@@ -54,7 +54,7 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit, path, visible, maze_color, finished):
+def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
     height = len(grid)
     width = len(grid[0])
 
@@ -69,7 +69,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
 
             print(maze_color + "|" if grid[y][x].walls["W"] else " ", end="")
             if grid[y][x].blocked:
-                print(maze_color + "###", end="")
+                print(color42 + "###", end="")
             elif grid[y][x] == entry:
                 print(maze_color + " E ", end="")
             elif grid[y][x] == exit:
@@ -91,7 +91,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
 
 
 
-def prim_maze(grid, maze_color):
+def prim_maze(grid, maze_color, color42):
     height = len(grid)
     width = len(grid[0])
 
@@ -119,7 +119,7 @@ def prim_maze(grid, maze_color):
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
             time.sleep(0.01)
-            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color, finished=False)
+            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
             cell.visited = True
 
             for n in get_neighbors(cell, grid):
@@ -137,7 +137,7 @@ def set_entry_exit(grid, entry, exit):
     return entry_cell, exit_cell
 
 
-def generate_maze(config, maze_color):
+def generate_maze(config, maze_color, color42):
     random.seed(config.get("SEED"))
 
     width = int(config.get("WIDTH", 20))
@@ -147,13 +147,13 @@ def generate_maze(config, maze_color):
 
     draw_42(grid)
 
-    prim_maze(grid, maze_color)
+    prim_maze(grid, maze_color, color42)
 
     entry_tuple = config.get("ENTRY")
     exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
-    print_maze(grid, entry, exit, path=None, visible=False, maze_color=maze_color, finished=True)
+    print_maze(grid, entry, exit, path=None, visible=False, maze_color=maze_color, color42=color42, finished=True)
 
     return grid, entry, exit
 
