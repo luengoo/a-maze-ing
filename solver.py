@@ -1,35 +1,36 @@
 from collections import deque
 
-def solver(grid, entry, exit, visited=False, path=None):
 
-    visited = set()
-    rows, cols = len(grid), len(grid[0])
+# bfs algo
+def solver(grid, entry, exit):
 
-    q = deque()
-    q.append([entry])
-    
-    visited.add((entry.y, entry.x))
+    # optimazation
+    parent = {entry: None}
 
-    directions = [
-        (0, -1),
-        (1, 0),
-        (0, 1),
-        (-1, 0)
-    ]
+    q = deque([entry])
+    directions = {
+        "N": (0, -1),
+        "E": (1, 0),
+        "S": (0, 1),
+        "W": (-1, 0)
+    }
 
     while q:
-        path = q.popleft()
-        current = path[-1]
+        current = q.popleft()
 
-        if current.x == exit.x and current.y == exit.y:
-            pass
+        if current == exit:
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+                path.reverse()
+            return path
 
-        for dy, dx in directions:
-            ny, nx = current.y + dy, current.x + dx
+        for direction, (dx, dy) in directions.items():
+            if not current.walls[direction]:
+                neighbor = grid[current.y + dy][current.x + dx]
+                if neighbor not in parent:
+                    parent[neighbor] = current
+                    q.append(neighbor)
 
-            if (0 <= nx < rows and 0 <= ny < cols and
-                grid[ny][nx] == 0 and (ny, nx) not in visited):
-                visited.add((ny, nx))
-                neighbor = grid[ny][nx]
-                q.append(path + neighbor)
-        return None
+    return None

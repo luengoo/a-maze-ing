@@ -87,7 +87,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, finished):
 
     if not finished:
         print("\n****** A-MAZE-ING ******")
-        print("1 - Regenerate a maze\n2 - Change colors\n3 - Hide path\n4 - Change color 42")
+        print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n4 - Change color 42")
 
 
 
