@@ -1,6 +1,7 @@
 from config_checker import ConfigChecker
 from maze_algorithm import generate_maze, print_maze
 from solver import solver
+from output_solver import output
 from colorama import Fore
 from itertools import cycle
 from time import sleep
@@ -14,6 +15,7 @@ def menu():
     color42 = Fore.WHITE
     grid, entry, exit = generate_maze(config, maze_color, color42)
     path = solver(grid, entry, exit)
+    output(grid, path, entry, exit)
     visible = False
 
     colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE))
@@ -26,6 +28,7 @@ def menu():
         if option == 1:
             grid, entry, exit = generate_maze(config, maze_color, color42)
             path = solver(grid, entry, exit)
+            output(grid, path, entry, exit)
             print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
         elif option == 2:

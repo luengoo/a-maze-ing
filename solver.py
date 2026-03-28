@@ -23,7 +23,8 @@ def solver(grid, entry, exit):
             while current is not None:
                 path.append(current)
                 current = parent[current]
-                path.reverse()
+
+            path.reverse()
             return path
 
         for direction, (dx, dy) in directions.items():
