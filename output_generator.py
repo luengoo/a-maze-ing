@@ -1,5 +1,5 @@
 
-def output(grid, path, entry, exit):
+def output(grid, path, entry, exit, output_name):
 
     height = len(grid)
     width = len(grid[0])
@@ -22,7 +22,7 @@ def output(grid, path, entry, exit):
 
     path_string = ''.join(directions)
 
-    with open("output.txt", "w") as f:
+    with open(output_name, "w") as f:
         for y in range(height):
             for x in range(width):
                 value = grid[y][x].walls["W"]* 8 + grid[y][x].walls["S"] * 4 + grid[y][x].walls["E"] * 2 + grid[y][x].walls["N"] * 1
@@ -33,4 +33,5 @@ def output(grid, path, entry, exit):
         f.write(f"\n{entry.x}, {entry.y}\n")
         f.write(f"{exit.x}, {exit.y}\n")
         f.write(f"{path_string}")
+
     return value
