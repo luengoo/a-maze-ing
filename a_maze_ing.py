@@ -33,13 +33,14 @@ def menu():
 
     print("\n****** A-MAZE-ING ******")
     print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-          "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+          "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+          "0 - Exit")
 
     option = int(input("\nEnter option: "))
 
     while True:
 
-        if option < 1 or option > 6:
+        if option < 0 or option > 6:
             print("Please input a valid choice.")
             option = int(input("\nEnter option: "))
 
@@ -84,16 +85,21 @@ def menu():
                 print_maze(grid, entry, exit, path, visible,
                            maze_color, color42, finished=False)
                 sleep(0.04)
+        elif option == 0:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return print("\nProgram finished successfully!\n")
 
         print("\n****** A-MAZE-ING ******")
         print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-              "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+              "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+              "0 - Exit")
 
         if option == 6:
             os.system('cls' if os.name == 'nt' else 'clear')
             print("\n****** A-MAZE-ING ******")
             print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-                  "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+                  "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+                  "0 - Exit")
 
         option = int(input("\nEnter option: "))
 
