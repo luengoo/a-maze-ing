@@ -1,7 +1,6 @@
 from colorama import Fore, Style
 import random
 import time
-import os
 
 
 class Cell:
@@ -54,7 +53,8 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
+def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished
+               ):
     height = len(grid)
     width = len(grid[0])
 
@@ -92,7 +92,7 @@ def imperfect_maze(grid):
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             cell = grid[y][x]
-        
+
             if cell.walls["E"] and x + 1 < len(grid[0]):
                 if random.random() < limit:
                     cell.walls["E"] = False
@@ -132,16 +132,19 @@ def prim_maze(grid, maze_color, color42, perfect):
             remove_wall(cell, neighbor)
             time.sleep(0.01)
 
-        print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
+        print_maze(grid, entry=None, exit=None, path=None, visible=False,
+                   maze_color=maze_color, color42=color42, finished=False)
         cell.visited = True
 
         for n in get_neighbors(cell, grid):
             if not n.visited and n not in frontier:
                 frontier.append(n)
 
-    if perfect == False:
+    if not perfect:
         imperfect_maze(grid)
-        print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
+        print_maze(grid, entry=None, exit=None, path=None, visible=False,
+                   maze_color=maze_color, color42=color42, finished=False)
+
 
 def set_entry_exit(grid, entry, exit):
     eny, enx = entry
@@ -170,7 +173,8 @@ def generate_maze(config, maze_color, color42):
     exit_tuple = config.get("EXIT")
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
-    print_maze(grid, entry, exit, path=None, visible=False, maze_color=maze_color, color42=color42, finished=True)
+    print_maze(grid, entry, exit, path=None, visible=False,
+               maze_color=maze_color, color42=color42, finished=True)
 
     return grid, entry, exit
 

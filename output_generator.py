@@ -4,7 +4,6 @@ def output(grid, path, entry, exit, output_name):
     height = len(grid)
     width = len(grid[0])
 
-
     directions = []
 
     for i in range(len(path) - 1):
@@ -25,7 +24,9 @@ def output(grid, path, entry, exit, output_name):
     with open(output_name, "w") as f:
         for y in range(height):
             for x in range(width):
-                value = grid[y][x].walls["W"]* 8 + grid[y][x].walls["S"] * 4 + grid[y][x].walls["E"] * 2 + grid[y][x].walls["N"] * 1
+                value = grid[y][x].walls[
+                    "W"] * 8 + grid[y][x].walls["S"] * 4 + grid[y][x].walls[
+                        "E"] * 2 + grid[y][x].walls["N"] * 1
                 value = format(value, 'X')
                 f.write(value)
             f.write("\n")

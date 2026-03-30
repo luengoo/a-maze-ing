@@ -4,7 +4,7 @@ from collections import deque
 # bfs algo
 def solver(grid, entry, exit):
 
-    # optimazation
+    # optimization
     parent = {entry: None}
 
     q = deque([entry])
