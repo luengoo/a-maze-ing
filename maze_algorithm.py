@@ -88,7 +88,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
 
 def imperfect_maze(grid):
 
-    limit = 0.10
+    limit = 0.15
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             cell = grid[y][x]
