@@ -64,8 +64,8 @@ def menu():
                     print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
                     sleep(0.04)
 
-    except Exception:
-        print(f"An error has been found. Please check config.txt.")
+    except Exception as e:
+        print(f"An error has been found. Please check config.txt.", e)
 
 
 if __name__ == "__main__":

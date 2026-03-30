@@ -76,6 +76,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
                 print(maze_color + " X ", end="")
             elif path and grid[y][x] in path and visible is True:
                 print(Fore.RED + " * ", end="" + Style.RESET_ALL)
+                time.sleep(0.2)
             else:
                 print("   ", end="")
 
