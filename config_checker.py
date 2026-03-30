@@ -39,7 +39,7 @@ class ConfigChecker:
             parts = value.split(",")
             if len(parts) == 2:
                 try:
-                    return (int(parts[0].strip()), int(parts[1].strip()))
+                    return (int(parts[1].strip()), int(parts[0].strip()))
                 except ValueError:
                     raise ValueError(f"Invalid tuple format for {key}: {value}"
                                      )
@@ -59,43 +59,50 @@ class ConfigChecker:
         required_keys = ["WIDTH", "HEIGHT", "ENTRY",
                          "EXIT", "OUTPUT_FILE", "PERFECT"]
 
+        width = config["WIDTH"]
+        height = config["HEIGHT"]
+        entry = config["ENTRY"]
+        exit = config["EXIT"]
+        perfect = config["PERFECT"]
+
         for key in required_keys:
             if key not in config:
                 raise ValueError(f"No required key found: {key}")
 
-        if config["WIDTH"] < 0 or config["HEIGHT"] < 0:
+        if width <= 0 or height <= 0:
             raise ValueError(
-                "Invalid width and height: must be equal or greater than 0")
+                "Invalid width and height: must be greater than 0.")
 
-        if not isinstance(config["ENTRY"], tuple):
+        if not isinstance(entry, tuple):
             raise ValueError("Entry point must be a tuple (X,X)")
 
-        if not isinstance(config["EXIT"], tuple):
+        if not isinstance(exit, tuple):
             raise ValueError("Exit point must be a tuple (X,X)")
 
-        if (config["ENTRY"] == config["EXIT"]):
+        if (entry == exit):
             raise ValueError("Exit and Entry must be different.")
 
         if not isinstance(
-         config["WIDTH"], int) or not isinstance(config["HEIGHT"], int):
+         width, int) or not isinstance(height, int):
             raise ValueError("Width and Height must be integers.")
 
-        if not (isinstance(config["PERFECT"], bool)):
+        if not (isinstance(perfect, bool)):
             raise ValueError(
                 "Perfect value in config must be a bool (True or False)")
 
-        if not (0 <= config["ENTRY"][0] < config["WIDTH"] and
-           0 <= config["ENTRY"][1] < config["HEIGHT"]):
-            raise ValueError("ENTRY fuera del mapa")
+        if not (0 <= entry[0] < width and
+           0 <= entry[1] < height):
+            raise ValueError("ENTRY outside of the map.")
 
-        if not (0 <= config["EXIT"][1] < config["WIDTH"] and
-                0 <= config["EXIT"][0] < config["HEIGHT"]):
-            raise ValueError("EXIT fuera del mapa")
+        if not (0 <= exit[1] < width and
+                0 <= exit[0] < height):
+            raise ValueError("EXIT outside of the map.")
 
-        blocked_cells = self.blocked_42_zone(config["WIDTH"], config["HEIGHT"])
-        if config["ENTRY"] in blocked_cells:
+        blocked_cells = self.blocked_42_zone(width, height)
+
+        if entry in blocked_cells:
             raise ValueError(
                 f"ENTRY {config['ENTRY']} is inside the blocked 42 coords")
-        if config["EXIT"] in blocked_cells:
+        if exit in blocked_cells:
             raise ValueError(
                 f"EXIT {config['EXIT']} is inside the blocked 42 coords")

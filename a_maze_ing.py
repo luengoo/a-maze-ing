@@ -6,9 +6,11 @@ from colorama import Fore
 from itertools import cycle
 from time import sleep
 from sys import argv
+import os
 
 
 def menu():
+
 
     if len(argv) != 2 or argv[1] != "config.txt":
         print("Usage: python3 a_maze_ing.py config.txt")
@@ -30,16 +32,26 @@ def menu():
         colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE))
         print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
+        print("\n****** A-MAZE-ING ******")
+        print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+
+        option = int(input("\nEnter option: "))
+
         while True:
-            option = int(input("\nEnter option: "))
+        
+            if option < 1 or option > 6:
+                print("Please input a valid choice.")
+                option = int(input("\nEnter option: "))
 
             if option == 1:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 grid, entry, exit = generate_maze(config, maze_color, color42)
                 path = solver(grid, entry, exit)
                 output(grid, path, entry, exit, output_name)
                 print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
             elif option == 2:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 maze_color = next(colors)
                 print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
@@ -49,13 +61,16 @@ def menu():
 
                 elif visible is False:
                     visible = True
+                os.system('cls' if os.name == 'nt' else 'clear')
                 print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
             elif option == 4:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 color42 = next(colors42)
                 print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
 
             elif option == 5:
+                os.system('cls' if os.name == 'nt' else 'clear')                
                 for _ in range(100):
                     color42 = next(colors42)
                     print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
@@ -64,8 +79,20 @@ def menu():
                     print_maze(grid, entry, exit, path, visible, maze_color, color42, finished=False)
                     sleep(0.04)
 
-    except Exception as e:
-        print(f"An error has been found. Please check config.txt.", e)
+            print("\n****** A-MAZE-ING ******")
+            print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+        
+            if option == 6:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print("\n****** A-MAZE-ING ******")
+                print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal")
+
+    
+            option = int(input("\nEnter option: "))
+
+
+    except Exception:
+        print(f"An error has been found. Please check config.txt.")
 
 
 if __name__ == "__main__":

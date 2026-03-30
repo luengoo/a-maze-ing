@@ -76,7 +76,6 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
                 print(maze_color + " X ", end="")
             elif path and grid[y][x] in path and visible is True:
                 print(Fore.RED + " * ", end="" + Style.RESET_ALL)
-                time.sleep(0.2)
             else:
                 print("   ", end="")
 
@@ -85,10 +84,6 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
     for x in range(width):
         print("+---", end="")
     print("+" + Style.RESET_ALL)
-
-    if not finished:
-        print("\n****** A-MAZE-ING ******")
-        print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n4 - Change color 42\n5 - Disco Mode")
 
 
 
