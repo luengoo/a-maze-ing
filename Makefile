@@ -1,4 +1,5 @@
 all:
+	clear
 	# python3 -m flake8
 	python3 a_maze_ing.py config.txt
 

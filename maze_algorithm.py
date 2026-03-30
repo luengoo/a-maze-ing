@@ -86,8 +86,24 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished):
     print("+" + Style.RESET_ALL)
 
 
+def imperfect_maze(grid):
 
-def prim_maze(grid, maze_color, color42):
+    limit = 0.10
+    for y in range(len(grid)):
+        for x in range(len(grid[0])):
+            cell = grid[y][x]
+        
+            if cell.walls["E"] and x + 1 < len(grid[0]):
+                if random.random() < limit:
+                    cell.walls["E"] = False
+                    grid[y][x + 1].walls["W"] = False
+            if cell.walls["S"] and y + 1 < len(grid):
+                if random.random() < limit:
+                    cell.walls["S"] = False
+                    grid[y + 1][x].walls["N"] = False
+
+
+def prim_maze(grid, maze_color, color42, perfect):
     height = len(grid)
     width = len(grid[0])
 
@@ -115,13 +131,17 @@ def prim_maze(grid, maze_color, color42):
             neighbor = random.choice(visited_neighbors)
             remove_wall(cell, neighbor)
             time.sleep(0.01)
-            print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
-            cell.visited = True
 
-            for n in get_neighbors(cell, grid):
-                if not n.visited and n not in frontier:
-                    frontier.append(n)
+        print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
+        cell.visited = True
 
+        for n in get_neighbors(cell, grid):
+            if not n.visited and n not in frontier:
+                frontier.append(n)
+
+    if perfect == False:
+        imperfect_maze(grid)
+        print_maze(grid, entry=None, exit=None, path=None, visible=False, maze_color=maze_color,color42=color42, finished=False)
 
 def set_entry_exit(grid, entry, exit):
     eny, enx = entry
@@ -136,6 +156,7 @@ def set_entry_exit(grid, entry, exit):
 def generate_maze(config, maze_color, color42):
     random.seed(config.get("SEED"))
 
+    perfect = config.get("PERFECT")
     width = int(config.get("WIDTH", 20))
     height = int(config.get("HEIGHT", 10))
 
@@ -143,7 +164,7 @@ def generate_maze(config, maze_color, color42):
 
     draw_42(grid)
 
-    prim_maze(grid, maze_color, color42)
+    prim_maze(grid, maze_color, color42, perfect)
 
     entry_tuple = config.get("ENTRY")
     exit_tuple = config.get("EXIT")
