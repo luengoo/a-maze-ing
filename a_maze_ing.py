@@ -1,26 +1,9 @@
-from config_checker import ConfigChecker
-from maze_algorithm import generate_maze, print_maze
-from solver import solver
-from output_generator import output
+from maze_generator import MazeGenerator
 from colorama import Fore
 from itertools import cycle
 from time import sleep
 from sys import argv
 import os
-import shutil
-
-
-def check_terminal_size(width: int, height: int) -> None:
-    """checks if terminal size is big enough for the maze"""
-
-    col, row = shutil.get_terminal_size()
-
-    required_cols = width * 4 + 1
-    required_rows = height * 2 + 1 + 9  # maze + bottom border + footer
-
-    if col < required_cols or row < required_rows:
-        raise RuntimeError("Terminal is too small. Please resize")
-
 
 def menu() -> None:
 
@@ -29,37 +12,26 @@ def menu() -> None:
     if len(argv) != 2 or argv[1] != "config.txt":
         print("Usage: python3 a_maze_ing.py config.txt")
 
-    checker = ConfigChecker()
-    config = checker.opener()
-    output_name = config.get("OUTPUT_FILE")
-
-    maze_color, color42 = Fore.WHITE, Fore.WHITE
-    visible = False
-
     try:
-        check_terminal_size(int(config.get("WIDTH", 20)),
-                            int(config.get("HEIGHT", 20)))
+        maze_color, color42 = Fore.WHITE, Fore.WHITE
+        visible = False
+        generator = MazeGenerator(visible, maze_color, color42)
 
-    except RuntimeError as e:
-        print(e)
-        return
+        colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE))
+        colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE))
 
-    grid, entry, exit = generate_maze(config, maze_color, color42)
-    path = solver(grid, entry, exit)
-    output(grid, path, entry, exit, output_name)
+        maze_color = next(colors)
+        generator.update_visuals(visible, maze_color, color42)
+        generator.create_maze()
+        generator.display_maze()
 
-    colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE))
-    colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE))
-    print_maze(grid, entry, exit, path, visible, maze_color, color42)
-
-    print("\n****** A-MAZE-ING ******")
-    print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-          "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
-          "0 - Exit")
-
-    option = int(input("\nEnter option: "))
-
-    try:
+        print("\n****** A-MAZE-ING ******")
+        print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
+            "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+            "0 - Exit")
+    
+        option = int(input("\nEnter option: "))
+        
         while True:
 
             if option < 0 or option > 6:
@@ -68,45 +40,38 @@ def menu() -> None:
 
             if option == 1:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                grid, entry, exit = generate_maze(config, maze_color, color42)
-                path = solver(grid, entry, exit)
-                output(grid, path, entry, exit, output_name)
-                print_maze(grid, entry, exit, path, visible,
-                           maze_color, color42)
+                generator.create_maze()
+                generator.display_maze()
 
             elif option == 2:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                maze_color = next(colors)
-                print_maze(grid, entry, exit, path, visible,
-                           maze_color, color42)
+                generator.maze_color = next(colors)
+                generator.display_maze()
 
             elif option == 3:
-                if visible is True:
-                    visible = False
+                if generator.visible is True:
+                    generator.visible = False
 
-                elif visible is False:
-                    visible = True
+                elif generator.visible is False:
+                    generator.visible = True
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print_maze(grid, entry, exit, path, visible,
-                           maze_color, color42)
+                generator.display_maze()
 
             elif option == 4:
                 os.system('cls' if os.name == 'nt' else 'clear')
-                color42 = next(colors42)
-                print_maze(grid, entry, exit, path, visible,
-                           maze_color, color42)
+                generator.color42 = next(colors42)
+                generator.display_maze()
 
             elif option == 5:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 for _ in range(100):
-                    color42 = next(colors42)
-                    print_maze(grid, entry, exit, path, visible,
-                               maze_color, color42)
+                    generator.color42 = next(colors42)
+                    generator.display_maze()
                     sleep(0.04)
-                    maze_color = next(colors)
-                    print_maze(grid, entry, exit, path, visible,
-                               maze_color, color42)
+                    generator.maze_color = next(colors)
+                    generator.display_maze()
                     sleep(0.04)
+    
             elif option == 0:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 return print("\nProgram finished successfully!\n")
@@ -125,8 +90,8 @@ def menu() -> None:
 
             option = int(input("\nEnter option: "))
 
-    except Exception as e:
-        print("An error has occured.", e)
+    except Exception:
+        print("An error has been found.")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+import shutil
+
 class ConfigChecker:
 
     """Config checking class"""
@@ -114,3 +116,15 @@ class ConfigChecker:
         if exit in blocked_cells:
             raise ValueError(
                 f"EXIT {config['EXIT']} is inside the blocked 42 coords")
+
+
+def check_terminal_size(width: int, height: int) -> None:
+    """checks if terminal size is big enough for the maze"""
+
+    col, row = shutil.get_terminal_size()
+
+    required_cols = width * 4 + 1
+    required_rows = height * 2 + 1 + 9  # maze + bottom border + footer
+
+    if col < required_cols or row < required_rows:
+        raise RuntimeError("Terminal is too small. Please resize")
