@@ -2,5 +2,5 @@ WIDTH=22
 HEIGHT=22
 ENTRY=0,0
 EXIT=21,21
-OUTPUT_FILE=maze_non_perfect_1.txt
+OUTPUT_FILE=output.txt
 PERFECT=True

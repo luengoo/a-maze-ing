@@ -1,8 +1,10 @@
 from collections import deque
 
 
-# bfs algo
-def solver(grid, entry, exit):
+def solver(grid: list[list], entry: tuple, exit: tuple):
+
+    """BFS Algorithm. Performant algorithm for maze solving with
+        perfect and non-perfect mazes""" 
 
     # optimization
     parent = {entry: None}

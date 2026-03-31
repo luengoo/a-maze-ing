@@ -1,5 +1,8 @@
 
-def output(grid, path, entry, exit, output_name):
+def output(grid: list[list], path: list, entry: tuple, exit: tuple, output_name: str) -> None:
+
+    """Writes the hexadecimal maze representation and
+     the path's steps into output_name.txt"""
 
     height = len(grid)
     width = len(grid[0])
@@ -35,4 +38,3 @@ def output(grid, path, entry, exit, output_name):
         f.write(f"{exit.x}, {exit.y}\n")
         f.write(f"{path_string}")
 
-    return value

@@ -1,8 +1,9 @@
 class ConfigChecker:
-    def __init__(self):
-        pass
+
+    """Config checking class"""
 
     def opener(self) -> dict:
+        """Opens the config file and returns the values"""
         config = {}
         try:
             with open("config.txt", "r") as file:
@@ -21,7 +22,9 @@ class ConfigChecker:
         except (ValueError, FileNotFoundError) as e:
             print(f"Found an error in config.txt file: {e}")
 
-    def parse_value(self, key: str, value: str):
+    def parse_value(self, key: str, value: str) -> tuple:
+        """Gets key value pairs"""
+
         if value.isdigit():
             return int(value)
         try:
@@ -46,7 +49,8 @@ class ConfigChecker:
 
         return value
 
-    def blocked_42_zone(self, width, height):
+    def blocked_42_zone(self, width: int, height: int) -> set:
+        """Defines the 42 drawing as blocked cells"""
         start_y = height // 2 - 2
         start_x = width // 2 - 6
         blocked_cells = set()
@@ -55,7 +59,11 @@ class ConfigChecker:
                 blocked_cells.add((start_y + dy, start_x + dx))
         return blocked_cells
 
-    def validate_config(self, config: dict):
+    def validate_config(self, config: dict) -> None:
+        """Check that the files has the required keys,
+            validates each key and value, raises errors
+            in case of an issue"""
+
         required_keys = ["WIDTH", "HEIGHT", "ENTRY",
                          "EXIT", "OUTPUT_FILE", "PERFECT"]
 

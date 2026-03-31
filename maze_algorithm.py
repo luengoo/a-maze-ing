@@ -4,7 +4,8 @@ import time
 
 
 class Cell:
-    def __init__(self, x, y):
+    """class that represents a cell of the maze"""
+    def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
         self.visited = False
@@ -12,11 +13,14 @@ class Cell:
         self.walls = {"N": True, "E": True, "S": True, "W": True}
 
 
-def create_grid(width, height):
+def create_grid(width: int, height: int) -> list[list]:
+    """creates full grid"""
     return [[Cell(x, y) for x in range(width)] for y in range(height)]
 
 
-def get_neighbors(cell, grid, include_blocked=False):
+def get_neighbors(cell: Cell, grid: list[list], include_blocked=False):
+    """get the neighboring cells of a cell"""
+
     directions = {
         "N": (0, -1),
         "E": (1, 0),
@@ -35,7 +39,9 @@ def get_neighbors(cell, grid, include_blocked=False):
     return neighbors
 
 
-def remove_wall(a, b):
+def remove_wall(a: Cell, b: Cell):
+    """removes wall cell"""
+
     dx = b.x - a.x
     dy = b.y - a.y
 
@@ -53,8 +59,7 @@ def remove_wall(a, b):
         b.walls["S"] = False
 
 
-def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished
-               ):
+def print_maze(grid: list[list], entry: tuple, exit: tuple, path: list, visible: bool, maze_color: str, color42: str) -> None:
     height = len(grid)
     width = len(grid[0])
 
@@ -86,7 +91,7 @@ def print_maze(grid, entry, exit, path, visible, maze_color, color42, finished
     print("+" + Style.RESET_ALL)
 
 
-def imperfect_maze(grid):
+def imperfect_maze(grid: list[list]):
 
     limit = 0.15
     for y in range(len(grid)):
@@ -103,7 +108,8 @@ def imperfect_maze(grid):
                     grid[y + 1][x].walls["N"] = False
 
 
-def prim_maze(grid, maze_color, color42, perfect):
+def prim_maze(grid: list[list], maze_color: str, color42: str, perfect: bool):
+    """Perfect maze generation algorithm"""
     height = len(grid)
     width = len(grid[0])
 
@@ -133,7 +139,7 @@ def prim_maze(grid, maze_color, color42, perfect):
             time.sleep(0.01)
 
         print_maze(grid, entry=None, exit=None, path=None, visible=False,
-                   maze_color=maze_color, color42=color42, finished=False)
+                   maze_color=maze_color, color42=color42)
         cell.visited = True
 
         for n in get_neighbors(cell, grid):
@@ -143,10 +149,11 @@ def prim_maze(grid, maze_color, color42, perfect):
     if not perfect:
         imperfect_maze(grid)
         print_maze(grid, entry=None, exit=None, path=None, visible=False,
-                   maze_color=maze_color, color42=color42, finished=False)
+                   maze_color=maze_color, color42=color42)
 
 
-def set_entry_exit(grid, entry, exit):
+def set_entry_exit(grid: list[list], entry: tuple, exit: tuple):
+    """ get the entry and exit cells on the grid"""
     eny, enx = entry
     exy, exx = exit
 
@@ -156,7 +163,8 @@ def set_entry_exit(grid, entry, exit):
     return entry_cell, exit_cell
 
 
-def generate_maze(config, maze_color, color42):
+def generate_maze(config: dict, maze_color: str, color42: str):
+    """orchestrates the maze generation"""
     random.seed(config.get("SEED"))
 
     perfect = config.get("PERFECT")
@@ -174,12 +182,13 @@ def generate_maze(config, maze_color, color42):
 
     entry, exit = set_entry_exit(grid, entry_tuple, exit_tuple)
     print_maze(grid, entry, exit, path=None, visible=False,
-               maze_color=maze_color, color42=color42, finished=True)
+               maze_color=maze_color, color42=color42)
 
     return grid, entry, exit
 
 
-def draw_42(grid):
+def draw_42(grid: list[list]):
+    """set the 42 pattern on the grid"""
     height = len(grid)
     width = len(grid[0])
 
