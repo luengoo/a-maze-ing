@@ -68,8 +68,16 @@ class ConfigChecker:
             in case of an issue"""
 
         required_keys = ["WIDTH", "HEIGHT", "ENTRY",
-                         "EXIT", "OUTPUT_FILE", "PERFECT"
+                         "EXIT", "PERFECT"
                          , "OUTPUT_FILE"]
+        
+
+        seen_keys = set()
+        for key, value in config.items():
+            if key in seen_keys:
+                raise ValueError("Duplicate key detected")
+            seen_keys.add(key)
+            config[key] = value
 
         width = config["WIDTH"]
         height = config["HEIGHT"]

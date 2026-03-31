@@ -1,4 +1,4 @@
-from config_checker import check_dep
+from parsing import check_dep
 from itertools import cycle
 from time import sleep
 from sys import argv
@@ -17,11 +17,10 @@ def menu() -> None:
     try:
         check_dep(reqs)
         from colorama import Fore
-        from maze_generator import MazeGenerator
-
+        from generator import CreateMaze
         maze_color, color42 = Fore.WHITE, Fore.WHITE
         visible = False
-        generator = MazeGenerator(visible, maze_color, color42)
+        generator = CreateMaze(visible, maze_color, color42)
 
         colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE, Fore.MAGENTA))
         colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE, Fore.MAGENTA))
@@ -37,7 +36,7 @@ def menu() -> None:
             "0 - Exit")
     
         option = input("\nEnter option: ")
-        
+
         while True:
 
             if option < "0" or option > "6":
