@@ -5,6 +5,7 @@ from maze_algorithm import generate_maze, print_maze
 import config_checker
 from solver import solver
 from itertools import cycle
+import os
 
 class MazeGenerator():
 
@@ -21,7 +22,7 @@ class MazeGenerator():
 
 
     def create_maze(self):
-
+        os.system('cls' if os.name == 'nt' else 'clear')
         try:
             checker = ConfigChecker()
             config = checker.opener()

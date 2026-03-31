@@ -39,12 +39,12 @@ def menu() -> None:
                 option = int(input("\nEnter option: "))
 
             if option == 1:
-                os.system('cls' if os.name == 'nt' else 'clear')
+
                 generator.create_maze()
                 generator.display_maze()
 
             elif option == 2:
-                os.system('cls' if os.name == 'nt' else 'clear')
+
                 generator.maze_color = next(colors)
                 generator.display_maze()
 
@@ -54,16 +54,16 @@ def menu() -> None:
 
                 elif generator.visible is False:
                     generator.visible = True
-                os.system('cls' if os.name == 'nt' else 'clear')
+
                 generator.display_maze()
 
             elif option == 4:
-                os.system('cls' if os.name == 'nt' else 'clear')
+
                 generator.color42 = next(colors42)
                 generator.display_maze()
 
             elif option == 5:
-                os.system('cls' if os.name == 'nt' else 'clear')
+
                 for _ in range(100):
                     generator.color42 = next(colors42)
                     generator.display_maze()
@@ -90,8 +90,8 @@ def menu() -> None:
 
             option = int(input("\nEnter option: "))
 
-    except Exception:
-        print("An error has been found.")
+    except Exception as e:
+        print(f"An error has been found: {e}")
 
 
 if __name__ == "__main__":

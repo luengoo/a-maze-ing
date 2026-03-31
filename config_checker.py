@@ -67,13 +67,15 @@ class ConfigChecker:
             in case of an issue"""
 
         required_keys = ["WIDTH", "HEIGHT", "ENTRY",
-                         "EXIT", "OUTPUT_FILE", "PERFECT"]
+                         "EXIT", "OUTPUT_FILE", "PERFECT"
+                         , "OUTPUT_FILE"]
 
         width = config["WIDTH"]
         height = config["HEIGHT"]
         entry = config["ENTRY"]
         exit = config["EXIT"]
         perfect = config["PERFECT"]
+        output = config["OUTPUT_FILE"]
 
         for key in required_keys:
             if key not in config:
@@ -108,14 +110,17 @@ class ConfigChecker:
                 0 <= exit[0] < height):
             raise ValueError("EXIT outside of the map.")
 
-        blocked_cells = self.blocked_42_zone(width, height)
+        if not output.endswith(".txt"):
+            raise ValueError("Output file should be '.txt'.")
 
-        if entry in blocked_cells:
-            raise ValueError(
-                f"ENTRY {config['ENTRY']} is inside the blocked 42 coords")
-        if exit in blocked_cells:
-            raise ValueError(
-                f"EXIT {config['EXIT']} is inside the blocked 42 coords")
+        if height >= 7 or width >= 12:
+            blocked_cells = self.blocked_42_zone(width, height)
+            if entry in blocked_cells:
+                raise ValueError(
+                    f"ENTRY {config['ENTRY']} is inside the blocked 42 coords")
+            if exit in blocked_cells:
+                raise ValueError(
+                    f"EXIT {config['EXIT']} is inside the blocked 42 coords")
 
 
 def check_terminal_size(width: int, height: int) -> None:
