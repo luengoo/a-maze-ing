@@ -4,7 +4,7 @@ from collections import deque
 def solver(grid: list[list], entry: tuple, exit: tuple):
 
     """BFS Algorithm. Performant algorithm for maze solving with
-        perfect and non-perfect mazes""" 
+        perfect and non-perfect mazes"""
 
     # optimization
     parent = {entry: None}

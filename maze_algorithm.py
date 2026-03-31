@@ -18,7 +18,8 @@ def create_grid(width: int, height: int) -> list[list]:
     return [[Cell(x, y) for x in range(width)] for y in range(height)]
 
 
-def get_neighbors(cell: Cell, grid: list[list], include_blocked=False):
+def get_neighbors(cell: Cell, grid: list[list],
+                  include_blocked=False) -> list[Cell]:
     """get the neighboring cells of a cell"""
 
     directions = {
@@ -39,7 +40,7 @@ def get_neighbors(cell: Cell, grid: list[list], include_blocked=False):
     return neighbors
 
 
-def remove_wall(a: Cell, b: Cell):
+def remove_wall(a: Cell, b: Cell) -> None:
     """removes wall cell"""
 
     dx = b.x - a.x
@@ -59,7 +60,8 @@ def remove_wall(a: Cell, b: Cell):
         b.walls["S"] = False
 
 
-def print_maze(grid: list[list], entry: tuple, exit: tuple, path: list, visible: bool, maze_color: str, color42: str) -> None:
+def print_maze(grid: list[list], entry: tuple, exit: tuple, path: list,
+               visible: bool, maze_color: str, color42: str) -> None:
     height = len(grid)
     width = len(grid[0])
 
@@ -152,7 +154,7 @@ def prim_maze(grid: list[list], maze_color: str, color42: str, perfect: bool):
                    maze_color=maze_color, color42=color42)
 
 
-def set_entry_exit(grid: list[list], entry: tuple, exit: tuple):
+def set_entry_exit(grid: list[list], entry: tuple, exit: tuple) -> tuple:
     """ get the entry and exit cells on the grid"""
     eny, enx = entry
     exy, exx = exit
@@ -163,7 +165,7 @@ def set_entry_exit(grid: list[list], entry: tuple, exit: tuple):
     return entry_cell, exit_cell
 
 
-def generate_maze(config: dict, maze_color: str, color42: str):
+def generate_maze(config: dict, maze_color: str, color42: str) -> tuple:
     """orchestrates the maze generation"""
     random.seed(config.get("SEED"))
 
@@ -187,7 +189,7 @@ def generate_maze(config: dict, maze_color: str, color42: str):
     return grid, entry, exit
 
 
-def draw_42(grid: list[list]):
+def draw_42(grid: list[list]) -> None:
     """set the 42 pattern on the grid"""
     height = len(grid)
     width = len(grid[0])

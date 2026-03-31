@@ -7,6 +7,19 @@ from itertools import cycle
 from time import sleep
 from sys import argv
 import os
+import shutil
+
+
+def check_terminal_size(width: int, height: int) -> None:
+    """checks if terminal size is big enough for the maze"""
+
+    col, row = shutil.get_terminal_size()
+
+    required_cols = width * 4 + 1
+    required_rows = height * 2 + 1 + 9  # maze + bottom border + footer
+
+    if col < required_cols or row < required_rows:
+        raise RuntimeError("Terminal is too small. Please resize")
 
 
 def menu() -> None:
@@ -15,7 +28,6 @@ def menu() -> None:
 
     if len(argv) != 2 or argv[1] != "config.txt":
         print("Usage: python3 a_maze_ing.py config.txt")
-        return
 
     checker = ConfigChecker()
     config = checker.opener()
@@ -23,6 +35,14 @@ def menu() -> None:
 
     maze_color, color42 = Fore.WHITE, Fore.WHITE
     visible = False
+
+    try:
+        check_terminal_size(int(config.get("WIDTH", 20)),
+                            int(config.get("HEIGHT", 20)))
+
+    except RuntimeError as e:
+        print(e)
+        return
 
     grid, entry, exit = generate_maze(config, maze_color, color42)
     path = solver(grid, entry, exit)
@@ -52,13 +72,13 @@ def menu() -> None:
                 path = solver(grid, entry, exit)
                 output(grid, path, entry, exit, output_name)
                 print_maze(grid, entry, exit, path, visible,
-                            maze_color, color42)
+                           maze_color, color42)
 
             elif option == 2:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 maze_color = next(colors)
                 print_maze(grid, entry, exit, path, visible,
-                            maze_color, color42)
+                           maze_color, color42)
 
             elif option == 3:
                 if visible is True:
@@ -68,24 +88,24 @@ def menu() -> None:
                     visible = True
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print_maze(grid, entry, exit, path, visible,
-                            maze_color, color42)
+                           maze_color, color42)
 
             elif option == 4:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 color42 = next(colors42)
                 print_maze(grid, entry, exit, path, visible,
-                            maze_color, color42)
+                           maze_color, color42)
 
             elif option == 5:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 for _ in range(100):
                     color42 = next(colors42)
                     print_maze(grid, entry, exit, path, visible,
-                                maze_color, color42)
+                               maze_color, color42)
                     sleep(0.04)
                     maze_color = next(colors)
                     print_maze(grid, entry, exit, path, visible,
-                                maze_color, color42)
+                               maze_color, color42)
                     sleep(0.04)
             elif option == 0:
                 os.system('cls' if os.name == 'nt' else 'clear')
@@ -93,20 +113,20 @@ def menu() -> None:
 
             print("\n****** A-MAZE-ING ******")
             print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-                    "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
-                    "0 - Exit")
+                  "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+                  "0 - Exit")
 
             if option == 6:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print("\n****** A-MAZE-ING ******")
-                print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-                        "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
-                        "0 - Exit")
+                print("1 - Regenerate a maze\n2 - Change colors\n"
+                      "3 - Toggle path\n4 - Change color 42\n"
+                      "5 - Disco Mode\n6 - Clear terminal\n0 - Exit")
 
             option = int(input("\nEnter option: "))
 
-    except Exception:
-        print("An error has occured.")
+    except Exception as e:
+        print("An error has occured.", e)
 
 
 if __name__ == "__main__":

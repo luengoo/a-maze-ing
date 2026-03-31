@@ -20,6 +20,6 @@ clean:
 lint:
 	python3 -m flake8 && mypy . --warn-return-any
 	--warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs
-	--check-untyped-defs
+	--check-untyped-defs a_maze_ing.py
 
 .PHONY = all install run debug clean lint
