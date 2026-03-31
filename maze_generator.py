@@ -1,10 +1,7 @@
 from config_checker import ConfigChecker, check_terminal_size
-from colorama import Fore
 from output_generator import output
 from maze_algorithm import generate_maze, print_maze
-import config_checker
 from solver import solver
-from itertools import cycle
 import os
 
 class MazeGenerator():

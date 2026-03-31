@@ -1,4 +1,5 @@
 import shutil
+import importlib
 
 class ConfigChecker:
 
@@ -133,3 +134,19 @@ def check_terminal_size(width: int, height: int) -> None:
 
     if col < required_cols or row < required_rows:
         raise RuntimeError("Terminal is too small. Please resize")
+
+def check_dep(reqs: list[str]) -> None:
+
+    missing = []
+    for req in reqs:
+        try:
+           _ = importlib.import_module(req)
+
+        except ModuleNotFoundError:
+            missing.append(req)
+    
+    if len(missing) > 0:
+        dep_str =  ", ".join(missing)
+        raise ModuleNotFoundError(f"Missing dependencies: {dep_str}")
+    
+
