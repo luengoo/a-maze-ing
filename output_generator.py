@@ -1,6 +1,8 @@
+from maze_algorithm import Cell
 
-def output(grid: list[list], path: list,
-           entry: tuple, exit: tuple, output_name: str) -> None:
+
+def output(grid: list[list[Cell]], path: list[Cell],
+           entry: Cell, exit: Cell, output_name: str) -> None:
 
     """Writes the hexadecimal maze representation and
      the path's steps into output_name.txt"""
@@ -28,11 +30,10 @@ def output(grid: list[list], path: list,
     with open(output_name, "w") as f:
         for y in range(height):
             for x in range(width):
-                value = grid[y][x].walls[
+                int_value = grid[y][x].walls[
                     "W"] * 8 + grid[y][x].walls["S"] * 4 + grid[y][x].walls[
                         "E"] * 2 + grid[y][x].walls["N"] * 1
-                value = format(value, 'X')
-                f.write(value)
+                f.write(format(int_value, 'X'))
             f.write("\n")
 
         f.write(f"\n{entry.x}, {entry.y}\n")

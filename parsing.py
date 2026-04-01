@@ -1,5 +1,6 @@
 import shutil
 import importlib
+from typing import Any
 
 
 class ConfigChecker:
@@ -26,7 +27,8 @@ class ConfigChecker:
         self.validate_config(config)
         return config
 
-    def parse_value(self, key: str, value: str) -> tuple:
+    def parse_value(self, key: str, value: str) -> (
+            tuple[Any, Any] | int | float | str):
         """Gets key value pairs"""
 
         if value.isdigit():

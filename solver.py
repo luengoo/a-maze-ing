@@ -1,13 +1,15 @@
 from collections import deque
+from maze_algorithm import Cell
 
 
-def solver(grid: list[list], entry: tuple, exit: tuple) -> list:
+def solver(grid: list[list[Cell]], entry: Cell, exit: Cell) -> (
+            list[Cell] | None):
 
     """BFS Algorithm. Performant algorithm for maze solving with
         perfect and non-perfect mazes"""
 
     # optimization
-    parent = {entry: None}
+    parent: dict[Cell, Cell | None] = {entry: None}
 
     q = deque([entry])
     directions = {
@@ -18,7 +20,7 @@ def solver(grid: list[list], entry: tuple, exit: tuple) -> list:
     }
 
     while q:
-        current = q.popleft()
+        current: Cell | None = q.popleft()
 
         if current == exit:
             path = []
@@ -30,6 +32,8 @@ def solver(grid: list[list], entry: tuple, exit: tuple) -> list:
             return path
 
         for direction, (dx, dy) in directions.items():
+            if current is None:
+                continue
             if not current.walls[direction]:
                 neighbor = grid[current.y + dy][current.x + dx]
                 if neighbor not in parent:
