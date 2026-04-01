@@ -17,7 +17,7 @@ def menu() -> None:
     try:
         check_dep(reqs)
         from colorama import Fore
-        from generator import CreateMaze
+        from maze_generator import CreateMaze
         maze_color, color42 = Fore.WHITE, Fore.WHITE
         visible = False
         generator = CreateMaze(visible, maze_color, color42)
@@ -25,21 +25,22 @@ def menu() -> None:
         colors = cycle((Fore.GREEN, Fore.YELLOW, Fore.WHITE, Fore.MAGENTA))
         colors42 = cycle((Fore.BLUE, Fore.MAGENTA, Fore.WHITE, Fore.MAGENTA))
 
-        maze_color = next(colors)
-        generator.update_visuals(visible, maze_color, color42)
-        generator.create_maze()
+        if not generator.create_maze():
+            return
         generator.display_maze()
+
 
         print("\n****** A-MAZE-ING ******")
         print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
             "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
             "0 - Exit")
-    
-        option = input("\nEnter option: ")
+
 
         while True:
 
-            if option < "0" or option > "6":
+            option = input("\nEnter option: ")
+
+            while option < "0" or option > "6" or len(option) != 1:
                 print("Please input a valid choice.")
                 option = input("\nEnter option: ")
 
@@ -89,12 +90,9 @@ def menu() -> None:
 
             if option == "6":
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print("\n****** A-MAZE-ING ******")
-                print("1 - Regenerate a maze\n2 - Change colors\n"
-                      "3 - Toggle path\n4 - Change color 42\n"
-                      "5 - Disco Mode\n6 - Clear terminal\n0 - Exit")
 
-            option = input("\nEnter option: ")
+            
+
 
     except Exception as e:
         print(f"An error has been found: {e}")

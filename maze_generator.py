@@ -1,4 +1,4 @@
-from config_checker import ConfigChecker, check_terminal_size
+from parsing import ConfigChecker, check_terminal_size
 from output_generator import output
 from maze_algorithm import generate_maze, print_maze
 from solver import solver
@@ -10,32 +10,33 @@ class CreateMaze():
         self.visible = visible
         self.maze_color = maze_color
         self.color42 = color42
+        self.grid = None
+        self.path = None
+        self.entry = None
+        self.exit = None
 
-
-    def update_visuals(self, visible, maze_color, color42):
-        self.visible = visible
-        self.maze_color = maze_color
-        self.color42 = color42
-
-
-    def create_maze(self):
+    def create_maze(self) -> bool:
         os.system('cls' if os.name == 'nt' else 'clear')
         try:
             checker = ConfigChecker()
             config = checker.opener()
         except (ValueError, FileNotFoundError) as e:
-            raise(e)
+            print(f"Found an error in config.txt file: {e}")
+            return False
 
         try:
             check_terminal_size(int(config.get("WIDTH")),
                                 int(config.get("HEIGHT")))
         except RuntimeError as e:
-            raise(e)
+            print(f"An error has been found: {e}")
+            return False
 
         output_name = config.get("OUTPUT_FILE")
         self.grid, self.entry, self.exit = generate_maze(config, self.maze_color, self.color42)
         self.path = solver(self.grid, self.entry, self.exit)
         output(self.grid, self.path, self.entry, self.exit, output_name)
+
+        return True
 
 
     def display_maze(self):

@@ -1,6 +1,7 @@
 import shutil
 import importlib
 
+
 class ConfigChecker:
 
     """Config checking class"""
@@ -8,22 +9,22 @@ class ConfigChecker:
     def opener(self) -> dict:
         """Opens the config file and returns the values"""
         config = {}
-        try:
-            with open("config.txt", "r") as file:
-                for line in file:
-                    line = line.strip()
+        with open("config.txt", "r") as file:
+            for line in file:
+                line = line.strip()
 
-                    if not line or line.startswith("#"):
-                        continue
-                    if "=" not in line:
-                        raise ValueError(f"Invalid line: {line}")
-                    key, value = line.split("=", 1)
-                    config[key.strip()] = self.parse_value(
-                        key.strip(), value.strip())
-            self.validate_config(config)
-            return config
-        except (ValueError, FileNotFoundError) as e:
-            print(f"Found an error in config.txt file: {e}")
+                if not line or line.startswith("#"):
+                    continue
+                if "=" not in line:
+                    raise ValueError(f"Invalid line: {line}")
+                key, value = line.split("=", 1)
+                key = key.strip()
+                if key in config:
+                    raise ValueError(f"Duplicate key detected. '{key}'")
+                config[key] = self.parse_value(key, value.strip())
+
+        self.validate_config(config)
+        return config
 
     def parse_value(self, key: str, value: str) -> tuple:
         """Gets key value pairs"""
@@ -72,12 +73,9 @@ class ConfigChecker:
                          , "OUTPUT_FILE"]
         
 
-        seen_keys = set()
-        for key, value in config.items():
-            if key in seen_keys:
-                raise ValueError("Duplicate key detected")
-            seen_keys.add(key)
-            config[key] = value
+        for key in required_keys:
+            if key not in config:
+                raise ValueError(f"No required key found: {key}")
 
         width = config["WIDTH"]
         height = config["HEIGHT"]
@@ -85,10 +83,6 @@ class ConfigChecker:
         exit = config["EXIT"]
         perfect = config["PERFECT"]
         output = config["OUTPUT_FILE"]
-
-        for key in required_keys:
-            if key not in config:
-                raise ValueError(f"No required key found: {key}")
 
         if width <= 0 or height <= 0:
             raise ValueError(
@@ -111,8 +105,8 @@ class ConfigChecker:
             raise ValueError(
                 "Perfect value in config must be a bool (True or False)")
 
-        if not (0 <= entry[0] < width and
-           0 <= entry[1] < height):
+        if not (0 <= entry[1] < width and
+           0 <= entry[0] < height):
             raise ValueError("ENTRY outside of the map.")
 
         if not (0 <= exit[1] < width and
