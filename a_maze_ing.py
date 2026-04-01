@@ -5,7 +5,6 @@ from sys import argv
 import os
 
 
-
 def menu() -> None:
 
     """Interface and main function"""
@@ -29,12 +28,10 @@ def menu() -> None:
             return
         generator.display_maze()
 
-
         print("\n****** A-MAZE-ING ******")
         print("1 - Regenerate a maze\n2 - Change colors\n3 - Toggle path\n"
-            "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
-            "0 - Exit")
-
+              "4 - Change color 42\n5 - Disco Mode\n6 - Clear terminal\n"
+              "0 - Exit")
 
         while True:
 
@@ -78,7 +75,7 @@ def menu() -> None:
                     generator.maze_color = next(colors)
                     generator.display_maze()
                     sleep(0.04)
-    
+
             elif option == "0":
                 os.system('cls' if os.name == 'nt' else 'clear')
                 return print("\nProgram finished successfully!\n")
@@ -90,9 +87,6 @@ def menu() -> None:
 
             if option == "6":
                 os.system('cls' if os.name == 'nt' else 'clear')
-
-            
-
 
     except Exception as e:
         print(f"An error has been found: {e}")

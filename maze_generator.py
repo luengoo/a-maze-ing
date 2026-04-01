@@ -4,8 +4,9 @@ from maze_algorithm import generate_maze, print_maze
 from solver import solver
 import os
 
-class CreateMaze():
 
+class CreateMaze():
+    """Maze creation class"""
     def __init__(self, visible, maze_color, color42):
         self.visible = visible
         self.maze_color = maze_color
@@ -16,6 +17,7 @@ class CreateMaze():
         self.exit = None
 
     def create_maze(self) -> bool:
+        """Creates the maze after calling the parser, return True if success"""
         os.system('cls' if os.name == 'nt' else 'clear')
         try:
             checker = ConfigChecker()
@@ -32,13 +34,15 @@ class CreateMaze():
             return False
 
         output_name = config.get("OUTPUT_FILE")
-        self.grid, self.entry, self.exit = generate_maze(config, self.maze_color, self.color42)
+        self.grid, self.entry, self.exit = generate_maze(
+            config, self.maze_color, self.color42)
+
         self.path = solver(self.grid, self.entry, self.exit)
         output(self.grid, self.path, self.entry, self.exit, output_name)
 
         return True
 
-
     def display_maze(self):
-        print_maze(self.grid, self.entry, self.exit, self.path, self.visible, self.maze_color, self.color42)
-        
+        """calls print_maze"""
+        print_maze(self.grid, self.entry, self.exit, self.path,
+                   self.visible, self.maze_color, self.color42)

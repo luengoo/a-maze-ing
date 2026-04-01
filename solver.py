@@ -1,7 +1,7 @@
 from collections import deque
 
 
-def solver(grid: list[list], entry: tuple, exit: tuple):
+def solver(grid: list[list], entry: tuple, exit: tuple) -> list:
 
     """BFS Algorithm. Performant algorithm for maze solving with
         perfect and non-perfect mazes"""

@@ -62,6 +62,7 @@ def remove_wall(a: Cell, b: Cell) -> None:
 
 def print_maze(grid: list[list], entry: tuple, exit: tuple, path: list,
                visible: bool, maze_color: str, color42: str) -> None:
+    """perfect maze creation algorithm"""
     height = len(grid)
     width = len(grid[0])
 
@@ -93,7 +94,8 @@ def print_maze(grid: list[list], entry: tuple, exit: tuple, path: list,
     print("+" + Style.RESET_ALL)
 
 
-def imperfect_maze(grid: list[list]):
+def imperfect_maze(grid: list[list]) -> None:
+    """randomly removes walls using a removal rate"""
 
     limit = 0.15
     for y in range(len(grid)):
@@ -110,7 +112,8 @@ def imperfect_maze(grid: list[list]):
                     grid[y + 1][x].walls["N"] = False
 
 
-def prim_maze(grid: list[list], maze_color: str, color42: str, perfect: bool):
+def prim_maze(grid: list[list], maze_color: str, color42: str,
+              perfect: bool) -> None:
     """Perfect maze generation algorithm"""
     height = len(grid)
     width = len(grid[0])

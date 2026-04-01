@@ -69,9 +69,8 @@ class ConfigChecker:
             in case of an issue"""
 
         required_keys = ["WIDTH", "HEIGHT", "ENTRY",
-                         "EXIT", "PERFECT"
-                         , "OUTPUT_FILE"]
-        
+                         "EXIT", "PERFECT",
+                         "OUTPUT_FILE"]
 
         for key in required_keys:
             if key not in config:
@@ -83,6 +82,9 @@ class ConfigChecker:
         exit = config["EXIT"]
         perfect = config["PERFECT"]
         output = config["OUTPUT_FILE"]
+
+        if not isinstance(width, int) or not isinstance(height, int):
+            raise ValueError("Width and height must be integers.")
 
         if width <= 0 or height <= 0:
             raise ValueError(
@@ -137,18 +139,16 @@ def check_terminal_size(width: int, height: int) -> None:
     if col < required_cols or row < required_rows:
         raise RuntimeError("Terminal is too small. Please resize")
 
-def check_dep(reqs: list[str]) -> None:
 
+def check_dep(reqs: list[str]) -> None:
+    """Checks for the missing dependencies"""
     missing = []
     for req in reqs:
         try:
-           _ = importlib.import_module(req)
-
+            _ = importlib.import_module(req)
         except ModuleNotFoundError:
             missing.append(req)
-    
-    if len(missing) > 0:
-        dep_str =  ", ".join(missing)
-        raise ModuleNotFoundError(f"Missing dependencies: {dep_str}")
-    
 
+    if len(missing) > 0:
+        dep_str = ", ".join(missing)
+        raise ModuleNotFoundError(f"Missing dependencies: {dep_str}")
