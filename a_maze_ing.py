@@ -11,6 +11,7 @@ def menu() -> None:
 
     if len(argv) != 2 or argv[1] != "config.txt":
         print("Usage: python3 a_maze_ing.py config.txt")
+        return
 
     reqs = ["colorama"]
     try:
