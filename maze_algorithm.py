@@ -142,7 +142,7 @@ def prim_maze(grid: list[list[Cell]], maze_color: str, color42: str,
             remove_wall(cell, neighbor)
             time.sleep(0.01)
 
-        os.system('clear')
+        print("\033[H", end="")
         print_maze(grid, entry=None, exit=None, path=None, visible=False,
                    maze_color=maze_color, color42=color42)
         cell.visited = True
