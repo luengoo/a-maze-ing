@@ -3,81 +3,132 @@
 # A-Maze-ing
 
 ## Description
-A-Maze-ing is a project written in Python 3.12. It is configurable via .txt file. The main goal is to create a full random maze, save it in a hexadecimal format and display it visually with a few interactive options. The program also includes a backtracking-solver function that searches for the shortest path and saves it in the same output file.
+A-Maze-ing is a project written in Python 3.12. It is configurable via a .txt file. The main goal is to create a fully random maze, save it in a hexadecimal format, and display it visually with a few interactive options. The program also includes a solver function that searches for the shortest path and saves it in the same output file.
 
 ## Instructions
 
 ### Compilation & Installation
-To install the necessary dependencies and prepare the enviroment, run the following command at the root of the repository:
-```
+To install the necessary dependencies and prepare the environment, run the following command at the root of the repository:
 
 make install
-```
 
 ### Execution
-```
+
 make run
-```
 
 Other Make rules:
-```
-make debug -->> run the main script in debug mode using Python's built-in debugger pdb.
-make clean -->> removes cache and trash files/directories
-make lint -->> strict flake8 standards
-```
+
+make debug  -> run the main script in debug mode using Python's built-in debugger (pdb)
+make clean  -> remove cache and temporary files/directories
+make lint   -> run strict flake8 checks
 
 ## Configuration file
-The config.txt file MUST exist to run this program. It works via KEY=VALUE, no other formats allowed:
-*WIDTH=15*
-*HEIGHT=15*
-*ENTRY=0,0*
-*EXIT=14,14*
-*OUTPUT_FILE=maze.txt*
-*PERFECT=True*
 
-ENTRY: Starting point of the maze
-EXIT: Goal
-OUTPUT_FILE: Here is where we store the maze in hexadecimal value, and the shortest path in N(North), S(South), E(East), W(West), each step being a cardinal point.
-PERFECT: Our maze algorithm (later explained) makes a perfect maze by default, being perfect a single path between two points of the maze (in this case, between entry and exit). If perfect is True, run the normal algorithm. Otherwise, remove some random walls.
+The config.txt file MUST exist to run this program. It follows a strict KEY=VALUE format.
+
+### Format
+KEY=VALUE
+
+### Example
+WIDTH=15
+HEIGHT=15
+ENTRY=0,0
+EXIT=14,14
+OUTPUT_FILE=maze.txt
+PERFECT=True
+
+### Description of parameters
+ENTRY: Starting point of the maze  
+EXIT: Goal position  
+OUTPUT_FILE: File where the maze is stored in hexadecimal format, along with the shortest path using N (North), S (South), E (East), W (West)  
+PERFECT: If True, generates a perfect maze (only one path between entry and exit). If False, additional walls are removed to create multiple possible paths  
 
 ## Maze Generation Algorithm
 
 ### Chosen algorithm
-- **Generation**: We chose to implement the **Prim's random maze algorithm**. This algorithm always starts with a single and random node in the grid and moves through several adjacent nodes, in order to explore all of the connected edges along the way. The idea is to maintain two sets of vertices. The first set contains the vertices already included in the MST (Minimum Spanning Tree), and the other set contains the vertices yet not included. At every step, it considers all the edges that connect the two sets and picks the MINIMUM WEIGHT edge from these. After picking the edge, it moves the other endpoint of the edge to the set containing MST.
 
-    **Advantages**: Prim's algorithm is guaranteed to find the MST in a connected, wighted graph. Its time complexity is O((E+V)*log(V)) using a binary heap or Fibonacci heap, where E is the number of edges and V the number of vertices. It is relatively simple to understand and implement compared to some other MST allgorithms. The real reason we chose it was because of the beauty of its generation, as it expands as a virus.
+- Generation: We implemented Prim's random maze algorithm. This algorithm starts from a random node and progressively expands across the grid by connecting adjacent nodes. It maintains two sets of vertices: one already included in the Minimum Spanning Tree (MST), and another with remaining vertices. At each step, it selects the minimum-weight edge connecting both sets and adds the corresponding node to the MST.
 
-    **Disadvantages**: It can be slow on dense graphs with many edges, as it requires iterating over all edges at least once. It relies on a priority queue, which can take up extra memory and slow down the algorithm in very large graphs.
-- **Solver**:
+Advantages:
+- Guaranteed to produce a valid spanning tree in a connected weighted graph  
+- Time complexity of O((E + V) * log(V)) using efficient data structures  
+- Relatively simple to implement  
+- Produces visually appealing mazes with organic expansion  
+
+Disadvantages:
+- Can be slower on dense graphs  
+- Requires additional memory for the priority queue  
+
+- Solver: Initially, we considered using recursive backtracking. However, this approach does not guarantee the shortest path in non-perfect mazes, as it stops at the first valid solution found. To solve this, we implemented a Breadth-First Search (BFS) algorithm. BFS uses a queue to explore all possible paths level by level, ensuring that the first time the exit is reached corresponds to the shortest path. This solution works reliably for both perfect and non-perfect mazes.
 
 ## Reusability
-The entire project is built with modularity in mind. All core logic (such as the Maze and Cell classes) is decoupled from the specific execution scripts. You can easily reuse the maze generation and solving logic in any other Python project by simply importing the modules:
 
+The project is designed with modularity in mind. Core components such as the Maze and Cell classes are independent from execution scripts. This allows easy reuse of the maze generation and solving logic in other Python projects by importing the relevant modules:
+
+## Reusable Module
+
+The maze generation logic is implemented as a standalone module that can be reused in other Python projects. It is designed around a main class (e.g., MazeGenerator) that encapsulates all generation logic.
+
+### Basic usage
+```python
+from mazegen import MazeGenerator
 ```
-from maze_algorithm import Cell
-...
-```
+# Create a generator with custom parameters
 
-## Team and Project management
+maze = MazeGenerator(width=15, height=15, seed=42)
 
-'a_maze_ing': zalabib- with the implementation of the menu and the main program.
-'config_checker': alluengo, being the first thing made of the project. Parsing the config file.
-'maze_algorithm': alluengo, with the Prim's algorithm.
-'solver': zalabib- with the creation of the solver.
-'Makefile': zalabib- with the whole Makefile creation.
-'README': alluengo, writing everything he thought inside this file.
+# Generate the maze
+maze.generate()
 
-At first, we took a look and talked about the main project structure, making a CHECKLIST file and realising the git branches work flow was going to be one of the big parts of this project. Then, we both worked on everything and with good communication and undestanding we made the project work.
+The generate() method builds the maze and initializes its internal attributes, such as the grid representation and the solution path.
+# Access the maze structure
+grid = maze.grid
 
-Each of us had our parts to work in, but we both worked on everything, as the main idea was being made by one, and the development by both.
+# Get the shortest path (solution)
+solution = maze.path
+
+## What worked well
+
+- Clear modular structure (Maze, Cell, solver separation)  
+- Good communication and collaboration between team members  
+- Effective use of Git branches when needed  
+
+## What could be improved
+
+- Better handling of edge cases such as terminal resizing during execution  
+- More advanced use of version control tools (branching strategy, commit structure)
+
+## Team and Project Management
+
+Parsing and maze generation: alluengo  
+Menu, solver, and optimizations: zalabib-  
+maze_algorithm: alluengo (Prim's algorithm implementation)    
+Makefile: zalabib-
+Packaging: zalabib- 
+README: alluengo, zalabib- 
+
+### Planning and evolution
+
+Initially, we planned to implement a recursive backtracking solver. During development, we realized that it did not guarantee the shortest path in non-perfect mazes. As a result, we switched to a BFS-based solver.
+
+We also improved the project structure early on by separating configuration parsing, maze generation, and solving into independent modules. This made collaboration easier and reduced integration issues.
+
+Our workflow with Git also evolved, as we progressively made better use of branches and coordination between team members.
+
+### Tools used
+
+- Git & GitHub for version control and collaboration  
+- Make for automation  
+- Flake8 for linting and code quality  
+- VS Code as the development environment  
 
 ## Resources
+- Artificial Intelligence was used in this project for documentation purposes (explaining algorithms and concepts) and to assist with debugging in specific cases.
 
 ### References
 
-- https://www.geeksforgeeks.org/dsa/prims-minimum-spanning-tree-mst-greedy-algo-5/
-- https://es.wikipedia.org/wiki/Algoritmo_de_Prim
+main ressources:
+- https://www.geeksforgeeks.org/dsa/prims-minimum-spanning-tree-mst-greedy-algo-5/  
+- https://es.wikipedia.org/wiki/Algoritmo_de_Prim  
 - https://www.jamisbuck.org/mazes/
-
-### AI Usage
-Artificcial Intelligence was used in this project specifically for documentation purposes.
+- https://www.youtube.com/watch?v=4wgRlNqIKqM
