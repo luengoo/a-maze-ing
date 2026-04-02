@@ -39,7 +39,6 @@ class CreateMaze():
             config, self.maze_color, self.color42)
 
         self.path = solver(self.grid, self.entry, self.exit)
-        self.path = solver(self.grid, self.entry, self.exit)
         if self.path is None:
             self.path = []
         output(self.grid, self.path, self.entry, self.exit, str(output_name))
