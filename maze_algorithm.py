@@ -2,7 +2,6 @@ from colorama import Fore, Style
 import random
 import time
 from typing import Optional, Any
-import os
 
 
 class Cell:
