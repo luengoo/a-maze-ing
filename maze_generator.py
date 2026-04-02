@@ -31,8 +31,7 @@ class CreateMaze():
             check_terminal_size(int(config.get("WIDTH")),  # type: ignore
                                 int(config.get("HEIGHT")))  # type: ignore
         except RuntimeError as e:
-            print(f"An error has been found: {e}")
-            return False
+            raise (e)
 
         output_name = config.get("OUTPUT_FILE")
         self.grid, self.entry, self.exit = generate_maze(
