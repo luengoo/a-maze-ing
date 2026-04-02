@@ -24,8 +24,7 @@ class CreateMaze():
             checker = ConfigChecker()
             config = checker.opener()
         except (ValueError, FileNotFoundError) as e:
-            print(f"Found an error in config.txt file: {e}")
-            return False
+            raise Exception(f"Found an error in config.txt file: {e}")
 
         try:
             check_terminal_size(int(config.get("WIDTH")),  # type: ignore

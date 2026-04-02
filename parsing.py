@@ -128,6 +128,10 @@ class ConfigChecker:
             if exit in blocked_cells:
                 raise ValueError(
                     f"EXIT {config['EXIT']} is inside the blocked 42 coords")
+        if height < 7 or width < 12:
+            raise ValueError(
+                "Maze size is too small for the 42 pattern"
+            )
 
 
 def check_terminal_size(width: int, height: int) -> None:

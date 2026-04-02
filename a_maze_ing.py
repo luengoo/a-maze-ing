@@ -47,9 +47,10 @@ def menu() -> None:
                 try:
                     generator.create_maze()
                     generator.display_maze()
-                except RuntimeError as e:
+                except (RuntimeError, ValueError) as e:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print(e)
+                    break
 
             elif option == "2":
                 os.system('cls' if os.name == 'nt' else 'clear')
